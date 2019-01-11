@@ -1,0 +1,31 @@
+{
+  "name": "extractdonnee",
+  "version": "1.0.0",
+  "description": "extraire donnees d'un fichier.xlsx et importer donnees en base",
+  "main": "index.js",
+  "scripts": {
+    "test": "start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/godzyken/tutosMeTest.git"
+  },
+  "author": "godzyken",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/godzyken/tutosMeTest/issues"
+  },
+  "homepage": "https://github.com/godzyken/tutosMeTest#readme",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "cors": "^2.8.5",
+    "express": "^4.16.4",
+    "express-list-endpoints": "^4.0.0",
+    "lodash": "^4.17.11",
+    "mysql": "^2.16.0",
+    "node-xlsx": "^0.12.1",
+    "officegen": "^0.4.7",
+    "xlsx": "^0.14.1",
+    "xmlbuilder": "^10.1.1"
+  }
+}
