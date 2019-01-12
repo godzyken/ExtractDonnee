@@ -1,10 +1,13 @@
 var express = require('express');
 var app = express();
-var cors = require('cors');
+const cors = require('cors');
 
+var corpsOptions = {
+    origin: 'http://localhost',
+    optionsSuccessStatus: 200
+};
 
-
-app.use(cors());
+app.use(cors(corpsOptions));
 
 var BronzeController = require('./bronze/BronzeController');
 app.use('/bronzes', BronzeController);

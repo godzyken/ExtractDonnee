@@ -35,6 +35,8 @@ var Bronze = {
             Bronze.matieres
         ], callback);
     }
-}
+};
+
+var extractDonnee = require('../extractDonnee');
 
 module.exports = Bronze;
