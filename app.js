@@ -1,18 +1,36 @@
-var express = require('express');
-var app = express();
-const cors = require('cors');
+const Sequelize = require('sequelize');
+const glob = require('glob');
+const fs = require('fs-extra');
 
-var corpsOptions = {
-    origin: 'http://localhost',
-    optionsSuccessStatus: 200
-};
+/*const sequelize = new Sequelize('tutosme.dev', 'tutosme.dev', 'HNmB1g1KWEODsI2u', {
+    host: 'appsvelocity.cabutdpbsmsc.eu-west-3.rds.amazonaws.com',
+    dialect: 'mysql'
+});*/
 
-app.use(cors(corpsOptions));
+const sequelize = new Sequelize('test', 'root', '', {
+    host: 'localhost',
+    dialect: 'mysql'
+});
 
-var BronzeController = require('./bronze/BronzeController');
-app.use('/bronzes', BronzeController);
 
-var GoldController = require('./gold/GoldController');
-app.use('/golds', GoldController);
+const Models = {};
 
-module.exports = app;
+(async () => {
+    await sequelize.authenticate();
+
+    glob.sync("./models/*.js").forEach(file => {
+        require(file)(sequelize, Models);
+    });
+
+
+    let client = await require("./bronze")(Models);
+    let formateur = await require("./gold")(Models);
+
+    await fs.outputFile("./bronze/data.json", JSON.stringify(client, null, 4), "utf8");
+    await fs.outputFile("./gold/data.json", JSON.stringify(formateur, null, 4), "utf8");
+
+
+    console.log("END");
+})().catch(err => {
+    console.error(err);
+});
