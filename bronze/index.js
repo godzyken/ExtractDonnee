@@ -24,6 +24,7 @@ module.exports = async (Models) => {
     const {titreCv, destCV} = FinderCV("../wetransfer-006b10/BBD Bronze/BBD Bronze/CV");
     const {blobpics, pocs} = FinderPics("../wetransfer-006b10/BBD Bronze/BBD Bronze/Photos");
 
+
     for (row of rows) {
 
         /* --- Extrait un User par ligne/row du fichier excel --- */
@@ -47,7 +48,7 @@ module.exports = async (Models) => {
             user.nomCv = row[titreCv[columns.nomCv]];
         }
 
-        for(poc of pocs) {
+        for (poc of pocs) {
 
             /* ---- Recuperer la liste de photo-profile ---- */
             user.picture = row[blobpics[columns.picture]];
@@ -64,6 +65,33 @@ module.exports = async (Models) => {
         console.log("le nom de l'image serra: " + filename);
         console.log("le Cv fourni est le: " + user.nomCv);
         console.log("le fichier de destination sera: " + path);
+
+
+        let src = path.join(__dirname, filename);
+
+        let destDir = path.join(__dirname, '/');
+
+        fs.access(destDir, (err) => {
+            if (err)
+                fs.mkdirSync(destDir);
+            copyFile(src, path.join(destDir, filename));
+        });
+
+        function copyFile(src, dest) {
+
+            let readStream = fs.createReadStream(src);
+
+            readStream.once('error', (err) => {
+                console.log(err);
+            });
+
+            readStream.once('end', () => {
+                console.log('copy éffectuer');
+            });
+
+            readStream.pipe(fs.createWriteStream(dest));
+        }
+
 
         // sauvegarder chaque User dans la bdd
         await user.save();
