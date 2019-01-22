@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize');
-const glob = require('glob');
+const Glob = require('glob').Glob;
 const fs = require('fs-extra');
 
 /*const sequelize = new Sequelize('tutosme.dev', 'tutosme.dev', 'HNmB1g1KWEODsI2u', {
@@ -18,10 +18,19 @@ const Models = {};
 (async () => {
     await sequelize.authenticate();
 
-    glob.sync("./models/*.js").forEach(file => {
-        require(file)(sequelize, Models);
-    });
+    // glob.sync("./models/*.js").forEach(file => {
+    //
+    //    require(file)(sequelize, Models);
+    // });
+    var glob = new Glob("./models/*js", sequelize, Models);
 
+    var files = glob.sync(glob);
+    if (Models) {
+        files = files.map(function (file) {
+            return file.replace(Models, '');
+        });
+    }
+    output = _.union(output, files);
 
     let client = await require("./bronze")(Models);
     let formateur = await require("./gold")(Models);
